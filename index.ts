@@ -1,7 +1,9 @@
 import { Aluno, Fileira } from "./types"
 import * as queue from "./fila";
 
-const aluno : Aluno = [
+
+// Cria um array de alunos
+const aluno : Aluno[] = [
   {
     nome: "João",
   },
@@ -50,64 +52,89 @@ const aluno : Aluno = [
   {
     nome: "Miguel",
   },
-];
+]
+
+// Coloca cada aluno em uma fileira aleatória
+function colocarNaFila(aluno: Aluno) {
+  const lugares = ['0', '1', '2', '3']
+  const lugar = lugares[Math.floor(Math.random() * lugares.length)]
+  aluno.nome = lugar
+  return aluno
+}
 
 // Array de alunos nas fileiras
 // Cada fileira pode ter NO MÁXIMO 5 alunos
-
-const sala: Fileira[] = [
+const fileira: Fileira[] = [
   {
-    fileira: "0",
+      numFileira: 0,
+      aluno: aluno,
+  },
+  {
+    numFileira: 1,
     aluno: queue.create(5),
   },
   {
-    fileira: "1",
+    numFileira: 2,
     aluno: queue.create(5),
   },
   {
-    fileira: "2",
+    numFileira: 3,
     aluno: queue.create(5),
   },
-];
-
-function fileira(sala: Fileira) {
-  const fileiras = ["Fileira 0", "Fileira 1", "Fileira 2", "Fileira 3"];
-  const fileira =
-    fileiras[Math.floor(Math.random() * fileiras.length)];
-
-  sala.fileira = fileira;
-  
-  return;
-}
+]
 
 // Inserindo/populando 5 alunos por fileira
-function encherFileira(sala: Fileira[]){
-  for (let i = 0; i < sala.length; i++) {
-    const alunoFileira = fileira(sala[i]);
+function encherFileira(aluno: Aluno[]) {
+  // Anda por toda a triagem
+  for (let i = 0; i < aluno.length; i++) {
 
-    
-    if (alunoFileira.aluno === "Fileira 0") {
-      queue.enqueue(alunoFileira, sala[0].aluno); // INSERE
-      queue.dequeue(sala); 
-      return;
+      // Passa um aluno pela fileira e recebe uma
+      const alunoNaFileira = colocarNaFila(aluno[i])
+
+      // Verifica que fileira é, colocando ele na fila
+      if(alunoNaFileira.numFileira === 1){
+          queue.enqueue(aluno, fileira[1].numFileira) //Insere na fileira
+          queue.dequeue(aluno) //Retira da fileira
+          return
+      }
+
+      if(alunoNaFileira.numFileira === 2){
+        queue.enqueue(aluno, fileira[2].numFileira) //Insere na fileira
+        queue.dequeue(aluno) //Retira da fileira
+        return
     }
-    if (alunoFileira.aluno === "Fileira 1") {
-      queue.enqueue(alunoFileira, sala[1].aluno);
-      queue.dequeue(sala);
-    }
-    if (alunoFileira.aluno === "Fileira 2") {
-      queue.enqueue(alunoFileira, sala[2].aluno);
-      queue.dequeue(sala);
-    }
+
+    if(alunoNaFileira.numFileira === 3){
+      queue.enqueue(aluno, fileira[3].numFileira) //Insere na fileira
+      queue.dequeue(aluno) //Retira da fileira
+      return
+  }
   }
 }
 
 // Função main
 function main() {
   // Função que chama retira todos alunos da fileira e "da tchau" para eles
-  function retirarAlunos (sala: Fileira []){
+  for (let i = 0; i < fileira.length; i++) {
+    const salaDeAula: Fileira = {
+      numFileira: i,
+      aluno: queue.peek(fileira)
+    }
+    console.log(`Fileira ${salaDeAula.numFileira + 1}`)
 
+    for (let j = 0; j < aluno.length; j++) {
+      if (queue.isEmpty(salaDeAula.aluno)) {
+        return
+      }
+
+      const alunoAtual = queue.dequeue(salaDeAula.aluno)
+
+      console.log(`${alunoAtual.nome} se levantou da cadeira ${j + 1}`)
+      console.log(`Tchau ${alunoAtual.nome}!`)
+      console.log("--------------------------------")
+      
+    }
+    console.log("\n")
+    queue.dequeue(fileira)
   }
-  
-  // Função que chama a fileira
 }
