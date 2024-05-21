@@ -53,6 +53,8 @@ const aluno : Aluno[] = [
     nome: "Miguel",
   },
 ]
+console.log(aluno)
+console.log("\n")
 
 // Coloca cada aluno em uma fileira aleatória
 function colocarNaFila(aluno: Aluno) {
@@ -85,10 +87,10 @@ const fileira: Fileira[] = [
 
 // Inserindo/populando 5 alunos por fileira
 function encherFileira(aluno: Aluno[]) {
-  // Anda por toda a triagem
+  // Anda por toda a fileira
   for (let i = 0; i < aluno.length; i++) {
 
-      // Passa um aluno pela fileira e recebe uma
+      // Passa um aluno pela fileira e recebe uma aleatória
       const alunoNaFileira = colocarNaFila(aluno[i])
 
       // Verifica que fileira é, colocando ele na fila
@@ -111,6 +113,7 @@ function encherFileira(aluno: Aluno[]) {
   }
   }
 }
+encherFileira(aluno)
 
 // Função main
 function main() {
@@ -120,15 +123,16 @@ function main() {
       numFileira: i,
       aluno: queue.peek(fileira)
     }
+
     console.log(`Fileira ${salaDeAula.numFileira + 1}`)
 
-    for (let j = 0; j < aluno.length; j++) {
+    for (let j = 0; j < fileira.length; j++) {
       if (queue.isEmpty(salaDeAula.aluno)) {
         return
       }
 
       const alunoAtual = queue.dequeue(salaDeAula.aluno)
-
+      
       console.log(`${alunoAtual.nome} se levantou da cadeira ${j + 1}`)
       console.log(`Tchau ${alunoAtual.nome}!`)
       console.log("--------------------------------")
@@ -138,3 +142,5 @@ function main() {
     queue.dequeue(fileira)
   }
 }
+main()
+
